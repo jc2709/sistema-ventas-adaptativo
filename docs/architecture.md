@@ -1,0 +1,3 @@
+# Arquitectura base
+
+CONTEXTO -> PROCESAMIENTO -> DECISIÓN -> ADAPTACIÓN
