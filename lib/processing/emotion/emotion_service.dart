@@ -10,22 +10,31 @@ class EmotionService {
   EmotionService({
     required this.model,
     this.preprocessor = const ImagePreprocessor(),
-    this.confidenceThreshold = 0.60,
+    this.confidenceThreshold = 0.45,
   }) : assert(confidenceThreshold >= 0 && confidenceThreshold <= 1);
 
+  /// Orden del modelo TFLite elegido.
   static const labels = <EmotionType>[
     EmotionType.happy,
-    EmotionType.neutral,
     EmotionType.sad,
-    EmotionType.angry,
     EmotionType.surprise,
+    EmotionType.fear,
+    EmotionType.angry,
+    EmotionType.disgust,
+    EmotionType.neutral,
   ];
 
   final EmotionModel model;
   final ImagePreprocessor preprocessor;
   final double confidenceThreshold;
 
+  Future<void> load() => model.load();
+
   Future<EmotionResult> detectEmotion(Uint8List faceBytes) async {
+    if (faceBytes.isEmpty) {
+      throw ArgumentError('La imagen del rostro no puede estar vacía.');
+    }
+
     final prepared = preprocessor.prepare(faceBytes);
     final scores = await model.predict(prepared);
     return resultFromScores(scores);
@@ -64,4 +73,6 @@ class EmotionService {
       confidence: bestScore,
     );
   }
+
+  Future<void> dispose() => model.dispose();
 }
