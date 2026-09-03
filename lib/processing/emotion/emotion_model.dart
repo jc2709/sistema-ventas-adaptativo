@@ -4,7 +4,8 @@ import 'dart:typed_data';
 abstract interface class EmotionModel {
   Future<void> load();
 
-  /// Orden esperado: happy, neutral, sad, angry, surprise.
+  /// Orden esperado:
+  /// happy, sad, surprise, fear, angry, disgust, neutral.
   Future<List<double>> predict(Uint8List preparedImage);
 
   Future<void> dispose();
